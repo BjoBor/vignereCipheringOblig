@@ -1,0 +1,66 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+string ElongateKey(string orgString, string key) {
+    int stringLength = orgString.length();
+    int orgKeyLength = key.length();
+    string orgKey = key;
+    int keyChar = 0;
+
+    while (key.length() < stringLength) {
+        key += orgKey[keyChar];
+
+        keyChar++;
+        if (keyChar == orgKeyLength) {
+            keyChar = 0;
+        }
+    }
+    return key;
+}
+
+string cipherText(string str, string key)
+{
+    string cipher_text;
+
+    for (int i = 0; i < str.length(); i++) {
+        char cipher_char = (str[i] + key[i]) % 26;
+
+        cipher_char += 'A'; 
+
+        cipher_text += cipher_char;
+    }
+    return cipher_text;
+}
+
+int main() {
+    string orgString = ""; //THEQUICKBROWNFOXJUMPSOVERTHELAZYDOG
+    string key1 = "", key2 = ""; //KONGSBERG, NORWAY, OSLO
+    int numOfKeys = 1;
+
+    cout << "What is the string you want to encrypt?\n WRITE THE STRING IN ALL CAPS WITH NO SPACES!\n";
+    cin >> orgString;
+    cout << "How many keys do you want? (1 or 2)\n";
+    cin >> numOfKeys;
+    cout << "What is the first key?\n";
+    cin >> key1;
+    if (numOfKeys > 1) {
+        cout << "What is the second key?\n";
+        cin >> key2;
+    }
+
+    string fullKey1 = ElongateKey(orgString, key1), fullKey2 = "", cipheredText = "";
+    string tempCipheredText = cipherText(orgString, fullKey1);
+    if (numOfKeys > 1) {
+        fullKey2 = ElongateKey(orgString, key2);
+        cipheredText = cipherText(orgString, fullKey2);
+    }   
+
+    cout << "Key 1:\n" + fullKey1 + "\n";
+    cout << "Ciphered with key 1:\n" + tempCipheredText + "\n";
+
+    if (numOfKeys > 1) {
+        cout << "Key 2:\n" + fullKey2 + "\n";
+        cout << "Ciphered with key 1 and 2:\n" + cipheredText + "\n";
+    }
+}
